@@ -4,76 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Argos">
   <link rel="manifest" href="argos-manifest.json">
   <link rel="apple-touch-icon" href="argos-icon-180.png">
   <title>Argos</title>
-  <!-- Prevent flash of light mode in dark preference -->
   <script>if(localStorage.getItem('argos-dark')==='1')document.documentElement.classList.add('dark');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ─── Light mode vars ─── */
     :root {
-      --bg: #f7f6f2;
-      --bg-card: #ffffff;
-      --bg-muted: #f0efe9;
-      --text: #1a1a18;
-      --text-secondary: #5a5a58;
-      --text-muted: #9a9a98;
-      --border: #e4e3de;
-      --urgent: #c0392b;        --urgent-bg: #fdf2f2;       --urgent-border: #f5c6c6;
-      --high: #d97327;          --high-bg: #fef6ee;         --high-border: #f5d8b8;
-      --normal: #4a7c59;        --normal-bg: #f2f8f4;       --normal-border: #c3deca;
-      --office: #2563aa;        --office-bg: #eff5ff;
-      --home: #6d4c9e;          --home-bg: #f5f0ff;
-      --computer: #374151;      --anywhere: #6b7280;
-      --quick: #0891b2;         --deep: #7c3aed;
-      --today: #0f766e;
-      --shadow: 0 1px 3px rgba(0,0,0,0.06);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --bg: #f7f6f2; --bg-card: #ffffff; --bg-muted: #f0efe9;
+      --text: #1a1a18; --text-secondary: #5a5a58; --text-muted: #9a9a98; --border: #e4e3de;
+      --urgent: #c0392b; --urgent-bg: #fdf2f2; --urgent-border: #f5c6c6;
+      --high: #d97327;   --high-bg: #fef6ee;   --high-border: #f5d8b8;
+      --normal: #4a7c59; --normal-bg: #f2f8f4; --normal-border: #c3deca;
+      --office: #2563aa; --office-bg: #eff5ff;
+      --home: #6d4c9e;   --home-bg: #f5f0ff;
+      --computer: #374151; --anywhere: #6b7280;
+      --quick: #0891b2; --deep: #7c3aed; --today: #0f766e;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06); --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
       --modal-bg: rgba(0,0,0,0.3);
     }
-
-    /* ─── Dark mode vars ─── */
     html.dark {
-      --bg: #1c1c1a;
-      --bg-card: #252523;
-      --bg-muted: #2e2e2b;
-      --text: #eeede8;
-      --text-secondary: #a0a09e;
-      --text-muted: #606060;
-      --border: #3a3a37;
-      --urgent-bg: #3d1e1e;     --urgent-border: #7a3030;
-      --high-bg: #3d2a14;       --high-border: #7a5020;
-      --normal-bg: #1e3028;     --normal-border: #3a6050;
-      --office-bg: #1a2840;
-      --home-bg: #2a1e40;
-      --shadow: 0 1px 3px rgba(0,0,0,0.35);
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+      --bg: #1c1c1a; --bg-card: #252523; --bg-muted: #2e2e2b;
+      --text: #eeede8; --text-secondary: #a0a09e; --text-muted: #606060; --border: #3a3a37;
+      --urgent-bg: #3d1e1e; --urgent-border: #7a3030;
+      --high-bg: #3d2a14;   --high-border: #7a5020;
+      --normal-bg: #1e3028; --normal-border: #3a6050;
+      --office-bg: #1a2840; --home-bg: #2a1e40;
+      --shadow: 0 1px 3px rgba(0,0,0,0.35); --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
       --modal-bg: rgba(0,0,0,0.55);
     }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      transition: background 0.2s, color 0.2s;
-    }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; transition: background 0.2s, color 0.2s; }
 
     /* ─── Header ─── */
-    header {
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 20px 0;
-      position: sticky; top: 0; z-index: 100;
-      transition: background 0.2s, border-color 0.2s;
-    }
+    header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 14px 20px 0; position: sticky; top: 0; z-index: 100; transition: background 0.2s, border-color 0.2s; }
     .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .logo { display: flex; align-items: center; gap: 10px; }
     .logo-eye { width: 30px; height: 30px; background: var(--text); border-radius: 7px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
@@ -94,11 +64,10 @@
     .view-toggle { display: flex; gap: 2px; background: var(--bg-muted); border-radius: 8px; padding: 3px; }
     .view-btn { background: none; border: none; padding: 5px 8px; border-radius: 5px; font-size: 13px; cursor: pointer; font-family: inherit; color: var(--text-secondary); transition: all 0.15s; line-height: 1; }
     .view-btn.active { background: var(--bg-card); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
-
     .icon-btn { background: none; border: 1px solid var(--border); padding: 6px 9px; border-radius: 8px; font-size: 15px; cursor: pointer; color: var(--text-secondary); line-height: 1; transition: all 0.15s; }
     .icon-btn:hover { background: var(--bg-muted); }
 
-    /* ─── Search bar ─── */
+    /* ─── Search ─── */
     .search-row { display: none; padding: 0 0 10px; }
     .search-row.visible { display: block; }
     .search-wrap { position: relative; }
@@ -112,18 +81,18 @@
     .filters::-webkit-scrollbar { display: none; }
     .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 500; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.15s; }
     .filter-btn.active { background: var(--text); color: white; border-color: var(--text); }
-    .filter-btn.urgent-filter.active  { background: var(--urgent);  border-color: var(--urgent);  }
-    .filter-btn.high-filter.active    { background: var(--high);    border-color: var(--high);    }
-    .filter-btn.normal-filter.active  { background: var(--normal);  border-color: var(--normal);  }
-    .filter-btn.office-filter.active  { background: var(--office);  border-color: var(--office);  }
-    .filter-btn.home-filter.active    { background: var(--home);    border-color: var(--home);    }
-    .filter-btn.quick-filter.active   { background: var(--quick);   border-color: var(--quick);   }
-    .filter-btn.deep-filter.active    { background: var(--deep);    border-color: var(--deep);    }
-    .filter-btn.today-filter.active   { background: var(--today);   border-color: var(--today);   }
+    .filter-btn.urgent-filter.active { background: var(--urgent); border-color: var(--urgent); }
+    .filter-btn.high-filter.active   { background: var(--high);   border-color: var(--high);   }
+    .filter-btn.normal-filter.active { background: var(--normal); border-color: var(--normal); }
+    .filter-btn.office-filter.active { background: var(--office); border-color: var(--office); }
+    .filter-btn.home-filter.active   { background: var(--home);   border-color: var(--home);   }
+    .filter-btn.quick-filter.active  { background: var(--quick);  border-color: var(--quick);  }
+    .filter-btn.deep-filter.active   { background: var(--deep);   border-color: var(--deep);   }
+    .filter-btn.today-filter.active  { background: var(--today);  border-color: var(--today);  }
 
     /* ─── Main ─── */
     main { padding: 18px 20px; max-width: 800px; margin: 0 auto; }
-    main.kanban-main  { max-width: none; padding: 16px; }
+    main.kanban-main   { max-width: none; padding: 16px; }
     main.calendar-main { max-width: 920px; }
     main.projects-main { max-width: 800px; }
 
@@ -141,7 +110,7 @@
     .urgent-section .section-label { color: var(--urgent); }
     .urgent-section .section-count { background: var(--urgent-bg); color: var(--urgent); }
     .high-section .section-label   { color: var(--high); }
-    .high-section .section-count   { background: var(--high-bg);   color: var(--high); }
+    .high-section .section-count   { background: var(--high-bg); color: var(--high); }
     .normal-section .section-label { color: var(--normal); }
     .normal-section .section-count { background: var(--normal-bg); color: var(--normal); }
     .today-section .section-label  { color: var(--today); }
@@ -152,13 +121,7 @@
     .project-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; padding-left: 2px; }
 
     /* ─── Task card ─── */
-    .task-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 13px 14px; margin-bottom: 7px;
-      display: flex; align-items: flex-start; gap: 11px;
-      box-shadow: var(--shadow); transition: box-shadow 0.15s, transform 0.15s, background 0.2s, border-color 0.2s;
-      cursor: default; position: relative; user-select: none;
-    }
+    .task-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 13px 14px; margin-bottom: 7px; display: flex; align-items: flex-start; gap: 11px; box-shadow: var(--shadow); transition: box-shadow 0.15s, transform 0.15s, background 0.2s, border-color 0.2s; cursor: default; position: relative; user-select: none; }
     .task-card:hover { box-shadow: var(--shadow-md); }
     .task-card.urgent { border-left: 3px solid var(--urgent); }
     .task-card.high   { border-left: 3px solid var(--high); }
@@ -207,7 +170,11 @@
     .section-collapse.collapsed .arrow { transform: rotate(-90deg); }
     .collapsible-body { overflow: hidden; transition: max-height 0.3s ease; }
 
-    /* ─── Delete / action buttons ─── */
+    /* ─── Clear done button ─── */
+    .clear-done-btn { margin-left: auto; background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 10px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .clear-done-btn:hover { background: var(--urgent-bg); color: var(--urgent); border-color: var(--urgent-border); }
+
+    /* ─── Delete button ─── */
     .delete-btn { position: absolute; top: 9px; right: 9px; background: none; border: none; color: var(--text-muted); font-size: 13px; line-height: 1; cursor: pointer; padding: 3px 5px; border-radius: 4px; opacity: 0; transition: opacity 0.15s; }
     .task-card:hover .delete-btn { opacity: 1; }
     @media (max-width: 600px) { .delete-btn { opacity: 0.35; } }
@@ -262,7 +229,7 @@
     .add-fab { position: fixed; bottom: 78px; right: 18px; width: 46px; height: 46px; background: var(--text); color: white; border: none; border-radius: 50%; font-size: 24px; line-height: 1; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.22); display: flex; align-items: center; justify-content: center; z-index: 200; transition: transform 0.15s, background 0.2s; }
     .add-fab:hover { transform: scale(1.08); }
 
-    /* ─── Modal (shared) ─── */
+    /* ─── Modals ─── */
     .modal-overlay { position: fixed; inset: 0; background: var(--modal-bg); z-index: 300; display: none; align-items: flex-end; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--bg-card); border-radius: 16px 16px 0 0; padding: 20px 20px 32px; width: 100%; max-width: 600px; box-shadow: 0 -4px 28px rgba(0,0,0,0.15); max-height: 92vh; overflow-y: auto; transition: background 0.2s; }
@@ -276,12 +243,12 @@
     .btn-save { flex: 1; background: var(--text); color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.2s; }
     .btn-cancel { background: var(--bg-muted); color: var(--text-secondary); border: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-family: inherit; cursor: pointer; }
 
-    /* ─── Snooze buttons ─── */
+    /* ─── Snooze ─── */
     .snooze-btns { display: flex; gap: 6px; }
     .snooze-btn { flex: 1; background: var(--bg-muted); border: 1px solid var(--border); padding: 8px 4px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; color: var(--text-secondary); transition: background 0.15s; text-align: center; }
     .snooze-btn:hover { background: var(--border); }
 
-    /* ─── Setup / Settings modal ─── */
+    /* ─── Setup modal ─── */
     .setup-overlay { position: fixed; inset: 0; background: var(--modal-bg); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; }
     .setup-overlay.open { display: flex; }
     .setup-box { background: var(--bg-card); border-radius: 16px; padding: 24px; max-width: 440px; width: 100%; box-shadow: var(--shadow-md); transition: background 0.2s; }
@@ -294,7 +261,7 @@
     .setup-danger-btn { width: 100%; background: none; border: 1px solid var(--urgent-border); color: var(--urgent); padding: 10px; border-radius: 8px; font-size: 13px; font-family: inherit; cursor: pointer; transition: background 0.15s; }
     .setup-danger-btn:hover { background: var(--urgent-bg); }
 
-    /* ─── Shortcuts help ─── */
+    /* ─── Shortcuts ─── */
     .shortcuts-overlay { position: fixed; inset: 0; background: var(--modal-bg); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
     .shortcuts-overlay.open { display: flex; }
     .shortcuts-box { background: var(--bg-card); border-radius: 14px; padding: 22px 24px; max-width: 360px; width: 100%; }
@@ -306,16 +273,10 @@
 
     /* ─── Responsive ─── */
     @media (max-width: 600px) {
-      header { padding: 12px 14px 0; }
-      main { padding: 12px; }
-      .task-card { padding: 11px 12px; }
-      .stats-bar { gap: 8px; padding: 9px 14px; }
-      h1 { font-size: 1rem; }
-      .form-grid { grid-template-columns: 1fr 1fr; }
+      header { padding: 12px 14px 0; } main { padding: 12px; } .task-card { padding: 11px 12px; }
+      .stats-bar { gap: 8px; padding: 9px 14px; } h1 { font-size: 1rem; } .form-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 380px) { .view-btn { padding: 5px 6px; } .icon-btn { padding: 6px 7px; } }
-
-    /* ─── Safe areas ─── */
     @supports (padding-bottom: env(safe-area-inset-bottom)) {
       .stats-bar { padding-bottom: calc(9px + env(safe-area-inset-bottom)); }
       .bottom-pad { height: calc(68px + env(safe-area-inset-bottom)); }
@@ -350,30 +311,28 @@
       </div>
       <button class="icon-btn" id="searchToggleBtn" onclick="toggleSearch()" title="Search (/)">🔍</button>
       <button class="icon-btn" id="darkBtn"         onclick="toggleDark()"   title="Dark mode (D)">🌙</button>
-      <button class="icon-btn"                       onclick="fetchFromGitHub()" title="Sync now">↻</button>
-      <button class="icon-btn"                       onclick="openSetup()"    title="Settings">⚙️</button>
+      <button class="icon-btn"                       onclick="fetchFromGitHub()" title="Sync now (R)">↻</button>
+      <button class="icon-btn"                       onclick="openSetup()"   title="Settings">⚙️</button>
     </div>
   </div>
-
   <div class="search-row" id="searchRow">
     <div class="search-wrap">
       <span class="search-icon-inner">🔍</span>
       <input class="search-input" id="searchInput" placeholder="Search tasks…" oninput="onSearchInput(this.value)" />
     </div>
   </div>
-
   <div class="filters" id="filterBar">
-    <button class="filter-btn active"        onclick="setFilter('all',this)">All</button>
-    <button class="filter-btn urgent-filter" onclick="setFilter('urgent',this)">🔴 Urgent</button>
-    <button class="filter-btn high-filter"   onclick="setFilter('high',this)">🟠 High</button>
-    <button class="filter-btn normal-filter" onclick="setFilter('normal',this)">🟢 Normal</button>
-    <button class="filter-btn"              onclick="setFilter('waiting',this)">⏳ Waiting On</button>
-    <button class="filter-btn today-filter" onclick="setFilter('today',this)">⭐ Today</button>
-    <button class="filter-btn quick-filter" onclick="setFilter('quick',this)">⚡ Quick</button>
-    <button class="filter-btn deep-filter"  onclick="setFilter('deep',this)">🎯 Deep Focus</button>
+    <button class="filter-btn active"         onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn urgent-filter"  onclick="setFilter('urgent',this)">🔴 Urgent</button>
+    <button class="filter-btn high-filter"    onclick="setFilter('high',this)">🟠 High</button>
+    <button class="filter-btn normal-filter"  onclick="setFilter('normal',this)">🟢 Normal</button>
+    <button class="filter-btn"               onclick="setFilter('waiting',this)">⏳ Waiting On</button>
+    <button class="filter-btn today-filter"  onclick="setFilter('today',this)">⭐ Today</button>
+    <button class="filter-btn quick-filter"  onclick="setFilter('quick',this)">⚡ Quick</button>
+    <button class="filter-btn deep-filter"   onclick="setFilter('deep',this)">🎯 Deep Focus</button>
     <button class="filter-btn office-filter" onclick="setFilter('office',this)">🏥 Office</button>
     <button class="filter-btn home-filter"   onclick="setFilter('home',this)">🏠 Home</button>
-    <button class="filter-btn"              onclick="setFilter('computer',this)">💻 Computer</button>
+    <button class="filter-btn"               onclick="setFilter('computer',this)">💻 Computer</button>
   </div>
 </header>
 
@@ -404,59 +363,22 @@
 <div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAddForm()">
   <div class="modal">
     <h3>Add Task</h3>
-    <div class="form-row">
-      <label class="form-label">Title</label>
-      <input class="form-input" id="newTitle" placeholder="Task title" />
-    </div>
+    <div class="form-row"><label class="form-label">Title</label><input class="form-input" id="newTitle" placeholder="Task title" /></div>
     <div class="form-row">
       <label class="form-label">Project</label>
       <select class="form-select" id="newProject" onchange="handleProjectChange()"></select>
     </div>
     <div class="form-row" id="newProjectRow" style="display:none">
-      <label class="form-label">New project name</label>
-      <input class="form-input" id="newProjectName" placeholder="Project name" />
+      <label class="form-label">New project name</label><input class="form-input" id="newProjectName" placeholder="Project name" />
     </div>
     <div class="form-grid">
-      <div class="form-row">
-        <label class="form-label">Priority</label>
-        <select class="form-select" id="newPriority">
-          <option value="normal">Normal</option>
-          <option value="high">High</option>
-          <option value="urgent">Urgent</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label class="form-label">Effort</label>
-        <select class="form-select" id="newEffort">
-          <option value="">—</option>
-          <option value="quick">Quick</option>
-          <option value="30min">30min</option>
-          <option value="deep_focus">Deep focus</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label class="form-label">Context</label>
-        <select class="form-select" id="newContext">
-          <option value="">—</option>
-          <option value="office">Office</option>
-          <option value="home">Home</option>
-          <option value="computer">Computer</option>
-          <option value="anywhere">Anywhere</option>
-        </select>
-      </div>
+      <div class="form-row"><label class="form-label">Priority</label><select class="form-select" id="newPriority"><option value="normal">Normal</option><option value="high">High</option><option value="urgent">Urgent</option></select></div>
+      <div class="form-row"><label class="form-label">Effort</label><select class="form-select" id="newEffort"><option value="">—</option><option value="quick">Quick</option><option value="30min">30min</option><option value="deep_focus">Deep focus</option></select></div>
+      <div class="form-row"><label class="form-label">Context</label><select class="form-select" id="newContext"><option value="">—</option><option value="office">Office</option><option value="home">Home</option><option value="computer">Computer</option><option value="anywhere">Anywhere</option></select></div>
     </div>
-    <div class="form-row">
-      <label class="form-label">Due date</label>
-      <input class="form-input" id="newDue" type="date" />
-    </div>
-    <div class="form-row">
-      <label class="form-label">Notes</label>
-      <input class="form-input" id="newNotes" placeholder="Any notes or details" />
-    </div>
-    <div class="form-actions">
-      <button class="btn-cancel" onclick="closeAddForm()">Cancel</button>
-      <button class="btn-save"   onclick="addTask()">Add Task</button>
-    </div>
+    <div class="form-row"><label class="form-label">Due date</label><input class="form-input" id="newDue" type="date" /></div>
+    <div class="form-row"><label class="form-label">Notes</label><input class="form-input" id="newNotes" placeholder="Any notes or details" /></div>
+    <div class="form-actions"><button class="btn-cancel" onclick="closeAddForm()">Cancel</button><button class="btn-save" onclick="addTask()">Add Task</button></div>
   </div>
 </div>
 
@@ -464,59 +386,22 @@
 <div class="modal-overlay" id="editModal" onclick="if(event.target===this)closeEditForm()">
   <div class="modal">
     <h3>Edit Task</h3>
-    <div class="form-row">
-      <label class="form-label">Title</label>
-      <input class="form-input" id="editTitle" placeholder="Task title" />
-    </div>
+    <div class="form-row"><label class="form-label">Title</label><input class="form-input" id="editTitle" placeholder="Task title" /></div>
     <div class="form-grid">
-      <div class="form-row">
-        <label class="form-label">Priority</label>
-        <select class="form-select" id="editPriority">
-          <option value="normal">Normal</option>
-          <option value="high">High</option>
-          <option value="urgent">Urgent</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label class="form-label">Effort</label>
-        <select class="form-select" id="editEffort">
-          <option value="">—</option>
-          <option value="quick">Quick</option>
-          <option value="30min">30min</option>
-          <option value="deep_focus">Deep focus</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label class="form-label">Context</label>
-        <select class="form-select" id="editContext">
-          <option value="">—</option>
-          <option value="office">Office</option>
-          <option value="home">Home</option>
-          <option value="computer">Computer</option>
-          <option value="anywhere">Anywhere</option>
-        </select>
-      </div>
+      <div class="form-row"><label class="form-label">Priority</label><select class="form-select" id="editPriority"><option value="normal">Normal</option><option value="high">High</option><option value="urgent">Urgent</option></select></div>
+      <div class="form-row"><label class="form-label">Effort</label><select class="form-select" id="editEffort"><option value="">—</option><option value="quick">Quick</option><option value="30min">30min</option><option value="deep_focus">Deep focus</option></select></div>
+      <div class="form-row"><label class="form-label">Context</label><select class="form-select" id="editContext"><option value="">—</option><option value="office">Office</option><option value="home">Home</option><option value="computer">Computer</option><option value="anywhere">Anywhere</option></select></div>
     </div>
-    <div class="form-row">
-      <label class="form-label">Due date</label>
-      <input class="form-input" id="editDue" type="date" />
-    </div>
-    <div class="form-row">
-      <label class="form-label">Notes</label>
-      <input class="form-input" id="editNotes" placeholder="Any notes or details" />
-    </div>
-    <div class="form-row">
-      <label class="form-label">Quick defer</label>
+    <div class="form-row"><label class="form-label">Due date</label><input class="form-input" id="editDue" type="date" /></div>
+    <div class="form-row"><label class="form-label">Notes</label><input class="form-input" id="editNotes" placeholder="Any notes or details" /></div>
+    <div class="form-row"><label class="form-label">Quick defer</label>
       <div class="snooze-btns">
         <button class="snooze-btn" onclick="snoozeTask(editingIndex,1)">Tomorrow</button>
         <button class="snooze-btn" onclick="snoozeTask(editingIndex,3)">+3 days</button>
         <button class="snooze-btn" onclick="snoozeTask(editingIndex,7)">+1 week</button>
       </div>
     </div>
-    <div class="form-actions">
-      <button class="btn-cancel" onclick="closeEditForm()">Cancel</button>
-      <button class="btn-save"   onclick="saveEdit()">Save</button>
-    </div>
+    <div class="form-actions"><button class="btn-cancel" onclick="closeEditForm()">Cancel</button><button class="btn-save" onclick="saveEdit()">Save</button></div>
   </div>
 </div>
 
@@ -531,20 +416,20 @@
   </div>
 </div>
 
-<!-- Keyboard shortcuts overlay -->
+<!-- Keyboard shortcuts -->
 <div class="shortcuts-overlay" id="shortcutsOverlay" onclick="if(event.target===this)closeShortcuts()">
   <div class="shortcuts-box">
     <h3>Keyboard Shortcuts</h3>
-    <div class="shortcut-row"><span class="shortcut-label">New task</span>       <span class="shortcut-key">N</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">Search</span>         <span class="shortcut-key">/</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">Sync now</span>       <span class="shortcut-key">R</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">List view</span>      <span class="shortcut-key">1</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">Board view</span>     <span class="shortcut-key">2</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">Calendar view</span>  <span class="shortcut-key">3</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">Projects view</span>  <span class="shortcut-key">4</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">Dark mode</span>      <span class="shortcut-key">D</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">Close / cancel</span> <span class="shortcut-key">Esc</span></div>
-    <div class="shortcut-row"><span class="shortcut-label">This help</span>      <span class="shortcut-key">?</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">New task</span>      <span class="shortcut-key">N</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">Search</span>        <span class="shortcut-key">/</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">Sync now</span>      <span class="shortcut-key">R</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">List view</span>     <span class="shortcut-key">1</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">Board view</span>    <span class="shortcut-key">2</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">Calendar view</span> <span class="shortcut-key">3</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">Projects view</span> <span class="shortcut-key">4</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">Dark mode</span>     <span class="shortcut-key">D</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">Close / cancel</span><span class="shortcut-key">Esc</span></div>
+    <div class="shortcut-row"><span class="shortcut-label">This help</span>     <span class="shortcut-key">?</span></div>
     <div style="margin-top:14px;font-size:12px;color:var(--text-muted)"><strong>Mobile:</strong> swipe right to complete, swipe left to edit</div>
     <div class="form-actions" style="margin-top:14px"><button class="btn-cancel" style="flex:1" onclick="closeShortcuts()">Close</button></div>
   </div>
@@ -554,29 +439,19 @@
 <div class="setup-overlay" id="setupOverlay">
   <div class="setup-box">
     <h3>GitHub Connection</h3>
-    <p class="setup-desc">Argos reads and writes your tasks via the GitHub API. Your token is stored only in this browser's local storage — never transmitted anywhere except to GitHub.</p>
-
+    <p class="setup-desc">Argos reads and writes your tasks via the GitHub API. Your token is stored only in this browser's local storage.</p>
     <div class="form-row">
       <label class="form-label">Personal Access Token</label>
       <input class="form-input" id="setupToken" type="password" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off" />
       <a class="setup-link" href="https://github.com/settings/tokens/new?scopes=repo&description=Argos" target="_blank" rel="noopener">Generate token on GitHub →</a>
     </div>
-    <div class="form-row">
-      <label class="form-label">Data repo (owner/repo)</label>
-      <input class="form-input" id="setupRepo" placeholder="aftyler/argos-data" />
-    </div>
-    <div class="form-row">
-      <label class="form-label">Branch</label>
-      <input class="form-input" id="setupBranch" placeholder="main" />
-    </div>
-
+    <div class="form-row"><label class="form-label">Data repo (owner/repo)</label><input class="form-input" id="setupRepo" placeholder="aftyler/argos-data" /></div>
+    <div class="form-row"><label class="form-label">Branch</label><input class="form-input" id="setupBranch" placeholder="main" /></div>
     <div class="setup-error" id="setupError"></div>
-
     <div class="form-actions">
       <button class="btn-cancel" id="setupCancelBtn" onclick="closeSetup()">Cancel</button>
       <button class="btn-save" onclick="saveSetup()">Connect</button>
     </div>
-
     <div class="setup-section">
       <div class="setup-section-label">Danger zone</div>
       <button class="setup-danger-btn" onclick="disconnectGitHub()">Disconnect &amp; clear token</button>
@@ -588,24 +463,18 @@
   // ─── State ───
   let rawContent = '', allTasks = [], tasksSHA = '';
   let activeFilter = 'all', activeView = 'list';
-  let searchQuery = '', searchActive = false;
-  let isDarkMode = false;
+  let searchQuery = '', searchActive = false, isDarkMode = false;
   let calendarYear = new Date().getFullYear(), calendarMonth = new Date().getMonth();
   let doneCollapsed = true, waitingCollapsed = false;
-  let editingIndex = null;
-  let dragSrcIndex = null;
-  let autoReloadTimer = null;
+  let editingIndex = null, dragSrcIndex = null, autoReloadTimer = null;
 
   // ─── Config ───
-  function getConfig() {
-    try { return JSON.parse(localStorage.getItem('argos-config')) || {}; } catch(e) { return {}; }
-  }
+  function getConfig() { try { return JSON.parse(localStorage.getItem('argos-config')) || {}; } catch(e) { return {}; } }
   function saveConfig(c) { localStorage.setItem('argos-config', JSON.stringify(c)); }
 
   // ─── Base64 (UTF-8 safe) ───
   function toBase64(str) {
-    const bytes = new TextEncoder().encode(str);
-    let binary = '';
+    const bytes = new TextEncoder().encode(str); let binary = '';
     for (const b of bytes) binary += String.fromCharCode(b);
     return btoa(binary);
   }
@@ -616,12 +485,10 @@
     return new TextDecoder().decode(bytes);
   }
 
-  // ─── Status indicator ───
+  // ─── Status ───
   function setStatus(state, text) {
-    const dot = document.getElementById('statusDot');
-    const lbl = document.getElementById('lastUpdated');
-    dot.className = 'status-dot ' + state;
-    lbl.textContent = text;
+    document.getElementById('statusDot').className = 'status-dot ' + state;
+    document.getElementById('lastUpdated').textContent = text;
   }
 
   // ─── GitHub: fetch ───
@@ -634,21 +501,14 @@
         `https://api.github.com/repos/${dataRepo}/contents/TASKS.md?ref=${branch||'main'}&_=${Date.now()}`,
         { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json' } }
       );
-      if (!res.ok) {
-        const err = await res.json().catch(()=>({}));
-        throw new Error(err.message || `HTTP ${res.status}`);
-      }
+      if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.message || `HTTP ${res.status}`); }
       const data = await res.json();
       tasksSHA = data.sha;
       rawContent = fromBase64(data.content);
       allTasks = parseTasks(rawContent);
-      const now = new Date();
-      setStatus('ok', `Synced ${now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`);
+      setStatus('ok', `Synced ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`);
       render();
-    } catch(e) {
-      setStatus('err', 'Sync failed — check settings');
-      console.error('Argos fetch error:', e);
-    }
+    } catch(e) { setStatus('err', 'Sync failed — check settings'); console.error(e); }
   }
 
   // ─── GitHub: write ───
@@ -657,35 +517,16 @@
     if (!token || !dataRepo) return;
     setStatus('loading', 'Saving…');
     try {
-      const res = await fetch(
-        `https://api.github.com/repos/${dataRepo}/contents/TASKS.md`,
-        {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message: 'Update TASKS.md via Argos',
-            content: toBase64(rawContent),
-            sha: tasksSHA,
-            branch: branch || 'main'
-          })
-        }
-      );
-      if (!res.ok) {
-        const err = await res.json().catch(()=>({}));
-        throw new Error(err.message || `HTTP ${res.status}`);
-      }
+      const res = await fetch(`https://api.github.com/repos/${dataRepo}/contents/TASKS.md`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Update TASKS.md via Argos', content: toBase64(rawContent), sha: tasksSHA, branch: branch||'main' })
+      });
+      if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.message || `HTTP ${res.status}`); }
       const data = await res.json();
       tasksSHA = data.content.sha;
-      const now = new Date();
-      setStatus('ok', `Saved ${now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`);
-    } catch(e) {
-      setStatus('err', 'Save failed');
-      console.error('Argos write error:', e);
-    }
+      setStatus('ok', `Saved ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`);
+    } catch(e) { setStatus('err', 'Save failed'); console.error(e); }
   }
 
   function startAutoReload() {
@@ -703,49 +544,34 @@
     document.getElementById('setupCancelBtn').style.display = cfg.token ? '' : 'none';
     document.getElementById('setupOverlay').classList.add('open');
   }
-  function closeSetup() {
-    document.getElementById('setupOverlay').classList.remove('open');
-  }
+  function closeSetup() { document.getElementById('setupOverlay').classList.remove('open'); }
   async function saveSetup() {
-    const token    = document.getElementById('setupToken').value.trim();
+    const token = document.getElementById('setupToken').value.trim();
     const dataRepo = document.getElementById('setupRepo').value.trim();
-    const branch   = document.getElementById('setupBranch').value.trim() || 'main';
-    const errEl    = document.getElementById('setupError');
-    if (!token || !dataRepo) {
-      errEl.textContent = 'Token and repo are required.';
-      errEl.style.display = 'block'; return;
-    }
+    const branch = document.getElementById('setupBranch').value.trim() || 'main';
+    const errEl = document.getElementById('setupError');
+    if (!token || !dataRepo) { errEl.textContent = 'Token and repo are required.'; errEl.style.display = 'block'; return; }
     errEl.style.display = 'none';
-    saveConfig({ token, dataRepo, branch });
-    closeSetup();
-    await fetchFromGitHub();
-    startAutoReload();
+    saveConfig({ token, dataRepo, branch }); closeSetup();
+    await fetchFromGitHub(); startAutoReload();
   }
   function disconnectGitHub() {
-    if (!confirm('Remove GitHub token and disconnect? Your tasks file will not be affected.')) return;
+    if (!confirm('Remove GitHub token and disconnect?')) return;
     localStorage.removeItem('argos-config');
     tasksSHA = ''; rawContent = ''; allTasks = [];
     setStatus('idle', 'Disconnected');
     document.getElementById('statsBar').style.display = 'none';
-    document.getElementById('mainContent').innerHTML = `<div class="empty-state"><div class="eye-large"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><h2>Disconnected</h2><p>Tap ⚙️ to reconnect to GitHub.</p></div>`;
+    document.getElementById('mainContent').innerHTML = `<div class="empty-state"><div class="eye-large"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><h2>Disconnected</h2><p>Tap ⚙️ to reconnect.</p></div>`;
     closeSetup();
     if (autoReloadTimer) { clearInterval(autoReloadTimer); autoReloadTimer = null; }
   }
 
   // ─── Init ───
   async function init() {
-    if (localStorage.getItem('argos-dark') === '1') {
-      isDarkMode = true;
-      document.getElementById('darkBtn').textContent = '☀️';
-    }
+    if (localStorage.getItem('argos-dark') === '1') { isDarkMode = true; document.getElementById('darkBtn').textContent = '☀️'; }
     const cfg = getConfig();
-    if (!cfg.token || !cfg.dataRepo) {
-      setStatus('idle', 'Not connected');
-      openSetup();
-    } else {
-      await fetchFromGitHub();
-      startAutoReload();
-    }
+    if (!cfg.token || !cfg.dataRepo) { setStatus('idle', 'Not connected'); openSetup(); }
+    else { await fetchFromGitHub(); startAutoReload(); }
   }
 
   // ─── Task mutations ───
@@ -754,6 +580,14 @@
     if (line.includes('- [ ]'))      lines[lineIndex] = line.replace('- [ ]','- [x]');
     else if (line.includes('- [x]')) lines[lineIndex] = line.replace('- [x]','- [ ]');
     rawContent = lines.join('\n'); allTasks = parseTasks(rawContent); render(); await writeBack();
+  }
+
+  async function clearDone() {
+    const doneCount = allTasks.filter(t => t.checked).length;
+    if (!doneCount) return;
+    if (!confirm(`Clear ${doneCount} completed task${doneCount===1?'':'s'}? This cannot be undone.`)) return;
+    rawContent = rawContent.split('\n').filter(l => !l.match(/^(\s*)- \[x\]/)).join('\n');
+    allTasks = parseTasks(rawContent); render(); await writeBack();
   }
 
   async function deleteTask(lineIndex) {
@@ -771,19 +605,15 @@
     const nd = `${MONTHS[base.getMonth()]} ${base.getDate()}`;
     const lines = rawContent.split('\n'); let line = lines[lineIndex];
     if (/due\s+[A-Za-z]+\s+\d+/i.test(line)) line = line.replace(/due\s+[A-Za-z]+\s+\d+/i, 'due '+nd);
-    else if (line.includes(' — '))            line += `; due ${nd}`;
-    else                                       line += ` — due ${nd}`;
+    else if (line.includes(' — ')) line += `; due ${nd}`;
+    else line += ` — due ${nd}`;
     lines[lineIndex] = line;
     rawContent = lines.join('\n'); allTasks = parseTasks(rawContent);
     closeEditForm(); render(); await writeBack();
   }
 
-  // ─── Drag and drop (Kanban) ───
-  function onDragStart(e, lineIndex) {
-    dragSrcIndex = lineIndex;
-    e.dataTransfer.effectAllowed = 'move';
-    e.currentTarget.classList.add('dragging');
-  }
+  // ─── Drag and drop ───
+  function onDragStart(e, lineIndex) { dragSrcIndex = lineIndex; e.dataTransfer.effectAllowed = 'move'; e.currentTarget.classList.add('dragging'); }
   function onDragEnd(e) { e.currentTarget.classList.remove('dragging'); }
   function onDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; e.currentTarget.classList.add('drag-over'); }
   function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
@@ -802,82 +632,67 @@
 
   // ─── Touch swipe ───
   let touchStartX=0, touchStartY=0, swipeEl=null;
-  document.addEventListener('touchstart', e => {
-    const card = e.target.closest('.task-card'); if (!card) return;
-    swipeEl = card; touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
-  }, { passive: true });
+  document.addEventListener('touchstart', e => { const card=e.target.closest('.task-card'); if(!card) return; swipeEl=card; touchStartX=e.touches[0].clientX; touchStartY=e.touches[0].clientY; }, {passive:true});
   document.addEventListener('touchend', e => {
     if (!swipeEl) return;
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-    if (Math.abs(dx) < 55 || Math.abs(dy) > Math.abs(dx) * 0.75) { swipeEl = null; return; }
-    const li = parseInt(swipeEl.dataset.line);
-    if (!isNaN(li)) {
-      if (dx > 55) {
-        swipeEl.classList.add('swipe-ok');
-        setTimeout(() => toggleTask(li), 180);
-      } else if (dx < -55) {
-        openEditForm(li);
-      }
-    }
-    swipeEl = null;
-  }, { passive: true });
+    const dx=e.changedTouches[0].clientX-touchStartX, dy=e.changedTouches[0].clientY-touchStartY;
+    if (Math.abs(dx)<55||Math.abs(dy)>Math.abs(dx)*0.75) { swipeEl=null; return; }
+    const li=parseInt(swipeEl.dataset.line);
+    if (!isNaN(li)) { if(dx>55){swipeEl.classList.add('swipe-ok');setTimeout(()=>toggleTask(li),180);}else if(dx<-55){openEditForm(li);} }
+    swipeEl=null;
+  }, {passive:true});
 
   // ─── Projects ───
   function getProjects() {
-    const out = []; const lines = rawContent.split('\n'); let inActive = false;
+    const out=[]; const lines=rawContent.split('\n'); let inActive=false;
     for (const l of lines) {
-      if (l.startsWith('## Active')) { inActive = true; continue; }
-      if (l.startsWith('## ') && inActive) break;
-      if (inActive && l.startsWith('### ')) out.push(l.slice(4).trim());
+      if (l.startsWith('## Active')) { inActive=true; continue; }
+      if (l.startsWith('## ')&&inActive) break;
+      if (inActive&&l.startsWith('### ')) out.push(l.slice(4).trim());
     }
     return out;
   }
-  function handleProjectChange() {
-    document.getElementById('newProjectRow').style.display = document.getElementById('newProject').value === '__new__' ? 'block' : 'none';
-  }
+  function handleProjectChange() { document.getElementById('newProjectRow').style.display=document.getElementById('newProject').value==='__new__'?'block':'none'; }
 
   // ─── Add task modal ───
   function openAddForm() {
-    const projects = getProjects(), sel = document.getElementById('newProject');
-    sel.innerHTML = '<option value="">— No project —</option>' + projects.map(p=>`<option value="${p}">${p}</option>`).join('') + '<option value="__new__">+ New project…</option>';
-    document.getElementById('newProjectRow').style.display = 'none';
+    const projects=getProjects(), sel=document.getElementById('newProject');
+    sel.innerHTML='<option value="">— No project —</option>'+projects.map(p=>`<option value="${p}">${p}</option>`).join('')+'<option value="__new__">+ New project…</option>';
+    document.getElementById('newProjectRow').style.display='none';
     document.getElementById('addModal').classList.add('open');
-    setTimeout(() => document.getElementById('newTitle').focus(), 50);
+    setTimeout(()=>document.getElementById('newTitle').focus(),50);
   }
   function closeAddForm() {
     document.getElementById('addModal').classList.remove('open');
-    ['newTitle','newNotes','newProjectName'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    ['newTitle','newNotes','newProjectName'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     document.getElementById('newPriority').value='normal'; document.getElementById('newEffort').value=''; document.getElementById('newContext').value='';
     document.getElementById('newDue').value=''; document.getElementById('newProjectRow').style.display='none';
   }
   async function addTask() {
-    const title = document.getElementById('newTitle').value.trim(); if (!title) { document.getElementById('newTitle').focus(); return; }
-    const priority = document.getElementById('newPriority').value;
-    const effort   = document.getElementById('newEffort').value;
-    const context  = document.getElementById('newContext').value;
-    const due      = inputValToDate(document.getElementById('newDue').value);
-    const notes    = document.getElementById('newNotes').value.trim();
-    let project    = document.getElementById('newProject').value;
-    if (project === '__new__') project = (document.getElementById('newProjectName').value||'').trim();
-    const tags = ['#'+priority]; if(effort) tags.push('#'+effort); if(context) tags.push('#'+context);
-    let line = `- [ ] **${title}** ${tags.join(' ')}`;
-    const extras=[]; if(notes) extras.push(notes); if(due) extras.push('due '+due);
-    if (extras.length) line += ' — '+extras.join('; ');
-    const lines = rawContent.split('\n');
-    if (project) {
-      const heading = `### ${project}`;
-      let pi = lines.findIndex(l => l.trim()===heading);
-      if (pi===-1) {
-        let at=lines.length; for(let i=0;i<lines.length;i++){ if(/^## (Waiting On|Someday|Done)/.test(lines[i])){at=i;break;} }
-        const pre = lines[at-1]==='' ? [] : [''];
+    const title=document.getElementById('newTitle').value.trim(); if(!title){document.getElementById('newTitle').focus();return;}
+    const priority=document.getElementById('newPriority').value, effort=document.getElementById('newEffort').value;
+    const context=document.getElementById('newContext').value, due=inputValToDate(document.getElementById('newDue').value);
+    const notes=document.getElementById('newNotes').value.trim();
+    let project=document.getElementById('newProject').value;
+    if(project==='__new__') project=(document.getElementById('newProjectName').value||'').trim();
+    const tags=['#'+priority]; if(effort)tags.push('#'+effort); if(context)tags.push('#'+context);
+    let line=`- [ ] **${title}** ${tags.join(' ')}`;
+    const extras=[]; if(notes)extras.push(notes); if(due)extras.push('due '+due);
+    if(extras.length) line+=' — '+extras.join('; ');
+    const lines=rawContent.split('\n');
+    if(project){
+      const heading=`### ${project}`;
+      let pi=lines.findIndex(l=>l.trim()===heading);
+      if(pi===-1){
+        let at=lines.length; for(let i=0;i<lines.length;i++){if(/^## (Waiting On|Someday|Done)/.test(lines[i])){at=i;break;}}
+        const pre=lines[at-1]===''?[]:[''];
         lines.splice(at,0,...pre,heading,line);
       } else {
-        let last=pi; for(let i=pi+1;i<lines.length;i++){ if(lines[i].startsWith('## ')||lines[i].startsWith('### ')) break; if(/^(\s*)- \[/.test(lines[i])) last=i; }
+        let last=pi; for(let i=pi+1;i<lines.length;i++){if(lines[i].startsWith('## ')||lines[i].startsWith('### '))break;if(/^(\s*)- \[/.test(lines[i]))last=i;}
         lines.splice(last+1,0,line);
       }
     } else {
-      let at=lines.length; for(let i=0;i<lines.length;i++){ if(/^## (Waiting On|Someday|Done)/.test(lines[i])){at=i;break;} }
+      let at=lines.length; for(let i=0;i<lines.length;i++){if(/^## (Waiting On|Someday|Done)/.test(lines[i])){at=i;break;}}
       lines.splice(at,0,line);
     }
     rawContent=lines.join('\n'); allTasks=parseTasks(rawContent); closeAddForm(); render(); await writeBack();
@@ -885,16 +700,16 @@
 
   // ─── Edit task modal ───
   function openEditForm(lineIndex) {
-    const t = allTasks.find(t => t.lineIndex===lineIndex); if (!t) return;
-    editingIndex = lineIndex;
+    const t=allTasks.find(t=>t.lineIndex===lineIndex); if(!t) return;
+    editingIndex=lineIndex;
     document.getElementById('editTitle').value    = t.title;
     document.getElementById('editPriority').value = t.priority;
-    document.getElementById('editEffort').value   = t.effort==='deep' ? 'deep_focus' : (t.effort||'');
+    document.getElementById('editEffort').value   = t.effort==='deep'?'deep_focus':(t.effort||'');
     document.getElementById('editContext').value  = t.context||'';
-    document.getElementById('editDue').value      = t.due ? dateToInputVal(t.due) : '';
+    document.getElementById('editDue').value      = t.due?dateToInputVal(t.due):'';
     document.getElementById('editNotes').value    = t.notes||'';
     document.getElementById('editModal').classList.add('open');
-    setTimeout(() => document.getElementById('editTitle').focus(), 50);
+    setTimeout(()=>document.getElementById('editTitle').focus(),50);
   }
   function closeEditForm() { document.getElementById('editModal').classList.remove('open'); editingIndex=null; }
   async function saveEdit() {
@@ -902,23 +717,39 @@
     const priority=document.getElementById('editPriority').value, effort=document.getElementById('editEffort').value;
     const context=document.getElementById('editContext').value, due=inputValToDate(document.getElementById('editDue').value);
     const notes=document.getElementById('editNotes').value.trim();
-    const tags=['#'+priority]; if(effort) tags.push('#'+effort); if(context) tags.push('#'+context);
+    const tags=['#'+priority]; if(effort)tags.push('#'+effort); if(context)tags.push('#'+context);
     const origLine=rawContent.split('\n')[editingIndex]||'';
     const isDone=origLine.includes('- [x]');
     let line=`${isDone?'- [x]':'- [ ]'} **${title}** ${tags.join(' ')}`;
-    const extras=[]; if(notes) extras.push(notes); if(due) extras.push('due '+due);
+    const extras=[]; if(notes)extras.push(notes); if(due)extras.push('due '+due);
     if(extras.length) line+=' — '+extras.join('; ');
     const lines=rawContent.split('\n'); lines[editingIndex]=line;
     rawContent=lines.join('\n'); allTasks=parseTasks(rawContent); closeEditForm(); render(); await writeBack();
   }
+
+  // ─── Day detail ───
+  function openDayDetail(yr, mo, day) {
+    const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const date=new Date(yr,mo,day);
+    const dt=allTasks.filter(t=>{
+      if(t.checked) return false;
+      const d=parseDue(t.due); if(!d) return false;
+      return d.getFullYear()===yr&&d.getMonth()===mo&&d.getDate()===day;
+    });
+    document.getElementById('dayDetailTitle').textContent=`${DAYS[date.getDay()]}, ${MONTHS[mo]} ${day}`;
+    document.getElementById('dayDetailBody').innerHTML=dt.map(t=>taskCard(t)).join('')||'<p style="color:var(--text-muted);font-size:13px">No tasks</p>';
+    document.getElementById('dayDetailOverlay').classList.add('open');
+  }
+  function closeDayDetail() { document.getElementById('dayDetailOverlay').classList.remove('open'); }
 
   // ─── Parser ───
   function parseTasks(content) {
     const tasks=[]; const lines=content.split('\n'); let section='',project='';
     for(let i=0;i<lines.length;i++){
       const line=lines[i];
-      if(line.startsWith('## ')) { section=line.slice(3).trim(); project=''; continue; }
-      if(line.startsWith('### ')){ project=line.slice(4).trim(); continue; }
+      if(line.startsWith('## ')){section=line.slice(3).trim();project='';continue;}
+      if(line.startsWith('### ')){project=line.slice(4).trim();continue;}
       const m=line.match(/^(\s*)- \[([x ])\] (.+)/); if(!m) continue;
       const checked=m[2]==='x', text=m[3];
       const titleM=text.match(/\*\*(.+?)\*\*/);
@@ -974,35 +805,26 @@
   // ─── Search ───
   function toggleSearch() {
     searchActive=!searchActive;
-    const row=document.getElementById('searchRow'), fb=document.getElementById('filterBar'), btn=document.getElementById('searchToggleBtn');
-    if(searchActive){
-      row.classList.add('visible'); fb.style.display='none';
-      btn.textContent='✕'; document.getElementById('searchInput').focus();
-    } else {
-      row.classList.remove('visible'); fb.style.display='flex';
-      btn.textContent='🔍'; searchQuery=''; document.getElementById('searchInput').value=''; render();
-    }
+    const row=document.getElementById('searchRow'),fb=document.getElementById('filterBar'),btn=document.getElementById('searchToggleBtn');
+    if(searchActive){row.classList.add('visible');fb.style.display='none';btn.textContent='✕';document.getElementById('searchInput').focus();}
+    else{row.classList.remove('visible');fb.style.display='flex';btn.textContent='🔍';searchQuery='';document.getElementById('searchInput').value='';render();}
   }
-  function onSearchInput(val){ searchQuery=val; render(); }
+  function onSearchInput(val){searchQuery=val;render();}
 
   // ─── Shortcuts ───
-  function closeShortcuts(){ document.getElementById('shortcutsOverlay').classList.remove('open'); }
-  function setViewByIndex(i){ const btns=document.querySelectorAll('.view-btn'),views=['list','kanban','calendar','projects']; if(btns[i]) setView(views[i],btns[i]); }
-
+  function closeShortcuts(){document.getElementById('shortcutsOverlay').classList.remove('open');}
+  function setViewByIndex(i){const btns=document.querySelectorAll('.view-btn'),views=['list','kanban','calendar','projects'];if(btns[i])setView(views[i],btns[i]);}
   document.addEventListener('keydown', e => {
-    const tag=document.activeElement.tagName;
-    const inInput=(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT');
-    if(e.key==='Escape'){ closeAddForm(); closeEditForm(); closeShortcuts(); closeSetup(); closeDayDetail(); if(searchActive) toggleSearch(); return; }
-    if(e.key==='?'&&!inInput){ document.getElementById('shortcutsOverlay').classList.add('open'); return; }
+    const tag=document.activeElement.tagName, inInput=(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT');
+    if(e.key==='Escape'){closeAddForm();closeEditForm();closeShortcuts();closeSetup();closeDayDetail();if(searchActive)toggleSearch();return;}
+    if(e.key==='?'&&!inInput){document.getElementById('shortcutsOverlay').classList.add('open');return;}
     if(inInput) return;
-    if(e.key==='n'||e.key==='N'){ e.preventDefault(); openAddForm(); }
-    if(e.key==='/'){ e.preventDefault(); if(!searchActive) toggleSearch(); }
-    if(e.key==='r'||e.key==='R'){ e.preventDefault(); fetchFromGitHub(); }
-    if(e.key==='1') setViewByIndex(0);
-    if(e.key==='2') setViewByIndex(1);
-    if(e.key==='3') setViewByIndex(2);
-    if(e.key==='4') setViewByIndex(3);
-    if(e.key==='d'||e.key==='D') toggleDark();
+    if(e.key==='n'||e.key==='N'){e.preventDefault();openAddForm();}
+    if(e.key==='/'){e.preventDefault();if(!searchActive)toggleSearch();}
+    if(e.key==='r'||e.key==='R'){e.preventDefault();fetchFromGitHub();}
+    if(e.key==='1')setViewByIndex(0); if(e.key==='2')setViewByIndex(1);
+    if(e.key==='3')setViewByIndex(2); if(e.key==='4')setViewByIndex(3);
+    if(e.key==='d'||e.key==='D')toggleDark();
   });
 
   // ─── Filter ───
@@ -1013,13 +835,13 @@
   }
   function taskMatchesFilter(t) {
     if(t.checked) return false;
-    if(searchQuery){ const q=searchQuery.toLowerCase(); return t.title.toLowerCase().includes(q)||(t.notes&&t.notes.toLowerCase().includes(q))||(t.project&&t.project.toLowerCase().includes(q)); }
+    if(searchQuery){const q=searchQuery.toLowerCase();return t.title.toLowerCase().includes(q)||(t.notes&&t.notes.toLowerCase().includes(q))||(t.project&&t.project.toLowerCase().includes(q));}
     if(activeFilter==='all')     return true;
     if(activeFilter==='urgent')  return t.priority==='urgent';
     if(activeFilter==='high')    return t.priority==='urgent'||t.priority==='high';
     if(activeFilter==='normal')  return t.priority==='normal';
     if(activeFilter==='waiting') return false;
-    if(activeFilter==='today'){  const d=parseDue(t.due); const now=new Date(); now.setHours(0,0,0,0); return t.priority==='urgent'||(d&&d.getTime()===now.getTime()); }
+    if(activeFilter==='today'){const d=parseDue(t.due);const now=new Date();now.setHours(0,0,0,0);return t.priority==='urgent'||(d&&d.getTime()===now.getTime());}
     if(activeFilter==='office')  return t.context==='office';
     if(activeFilter==='home')    return t.context==='home';
     if(activeFilter==='quick')   return t.effort==='quick';
@@ -1036,11 +858,11 @@
     main.className=v==='kanban'?'kanban-main':v==='calendar'?'calendar-main':v==='projects'?'projects-main':'';
     const hideFilters=(v==='calendar'||v==='projects');
     document.getElementById('filterBar').style.display=hideFilters?'none':'flex';
-    if(searchActive&&hideFilters){ toggleSearch(); }
+    if(searchActive&&hideFilters)toggleSearch();
     render();
   }
 
-  // ─── Render dispatcher ───
+  // ─── Render ───
   function render(){
     const allActive=allTasks.filter(t=>t.section==='Active'&&!t.checked);
     document.getElementById('statUrgent').textContent=allActive.filter(t=>t.priority==='urgent').length;
@@ -1048,84 +870,54 @@
     document.getElementById('statTotal').textContent=allActive.length;
     document.getElementById('statDone').textContent=allTasks.filter(t=>t.checked).length;
     document.getElementById('statsBar').style.display='flex';
-    if(activeView==='kanban')   { renderKanban();   return; }
-    if(activeView==='calendar') { renderCalendar(); return; }
-    if(activeView==='projects') { renderProjects(); return; }
+    if(activeView==='kanban'){renderKanban();return;} if(activeView==='calendar'){renderCalendar();return;} if(activeView==='projects'){renderProjects();return;}
     renderList();
   }
 
-  // ─── List view ───
   function renderList(){
     const allActive=allTasks.filter(t=>t.section==='Active'&&!t.checked);
     const waiting=allTasks.filter(t=>t.section==='Waiting On'&&!t.checked);
     const done=allTasks.filter(t=>t.checked);
     let html='';
-
     if(activeFilter==='waiting'){
-      html=waiting.length
-        ?`<div class="section"><div class="section-header"><span class="section-label">⏳ Waiting On</span><span class="section-count">${waiting.length}</span></div>${waiting.map(t=>taskCard(t)).join('')}</div>`
-        :'<div class="empty-state"><h2>Nothing waiting</h2><p>No tasks in Waiting On.</p></div>';
+      html=waiting.length?`<div class="section"><div class="section-header"><span class="section-label">⏳ Waiting On</span><span class="section-count">${waiting.length}</span></div>${waiting.map(t=>taskCard(t)).join('')}</div>`:'<div class="empty-state"><h2>Nothing waiting</h2><p>No tasks in Waiting On.</p></div>';
       document.getElementById('mainContent').innerHTML=html; return;
     }
-
     const filtered=allActive.filter(taskMatchesFilter);
-    const urgent=filtered.filter(t=>t.priority==='urgent');
-    const high=filtered.filter(t=>t.priority==='high');
-    const normal=filtered.filter(t=>t.priority==='normal');
-
-    const sectionLabel = activeFilter==='today' ? '⭐ Today' : null;
-
+    const urgent=filtered.filter(t=>t.priority==='urgent'), high=filtered.filter(t=>t.priority==='high'), normal=filtered.filter(t=>t.priority==='normal');
+    const sectionLabel=activeFilter==='today'?'⭐ Today':null;
     if(filtered.length===0&&allActive.length>0) html='<div class="empty-state"><h2>No tasks match</h2><p>Try a different filter.</p></div>';
     else if(filtered.length===0) html='<div class="empty-state"><h2>All clear</h2><p>No active tasks.</p></div>';
-    else if(sectionLabel){
-      html+=renderSection('today',sectionLabel,filtered);
-    } else {
-      if(urgent.length) html+=renderSection('urgent','🔴 Urgent',urgent);
-      if(high.length)   html+=renderSection('high','🟠 High',high);
-      if(normal.length) html+=renderSection('normal','🟢 Normal',normal);
-    }
-
-    if(waiting.length){
-      html+=`<div class="section"><div class="section-header"><button class="section-collapse ${waitingCollapsed?'collapsed':''}" onclick="toggleCollapse('waiting')"><span class="arrow">▼</span><span class="section-label">Waiting On</span></button><span class="section-count">${waiting.length}</span></div><div class="collapsible-body" id="waiting-body" style="max-height:${waitingCollapsed?'0':'2000px'}">${waiting.map(t=>taskCard(t)).join('')}</div></div>`;
-    }
-    if(done.length){
-      html+=`<div class="section"><div class="section-header"><button class="section-collapse ${doneCollapsed?'collapsed':''}" onclick="toggleCollapse('done')"><span class="arrow">▼</span><span class="section-label">Done</span></button><span class="section-count">${done.length}</span></div><div class="collapsible-body" id="done-body" style="max-height:${doneCollapsed?'0':'2000px'}">${done.map(t=>taskCard(t)).join('')}</div></div>`;
-    }
+    else if(sectionLabel){ html+=renderSection('today',sectionLabel,filtered); }
+    else { if(urgent.length)html+=renderSection('urgent','🔴 Urgent',urgent); if(high.length)html+=renderSection('high','🟠 High',high); if(normal.length)html+=renderSection('normal','🟢 Normal',normal); }
+    if(waiting.length) html+=`<div class="section"><div class="section-header"><button class="section-collapse ${waitingCollapsed?'collapsed':''}" onclick="toggleCollapse('waiting')"><span class="arrow">▼</span><span class="section-label">Waiting On</span></button><span class="section-count">${waiting.length}</span></div><div class="collapsible-body" id="waiting-body" style="max-height:${waitingCollapsed?'0':'2000px'}">${waiting.map(t=>taskCard(t)).join('')}</div></div>`;
+    if(done.length) html+=`<div class="section"><div class="section-header"><button class="section-collapse ${doneCollapsed?'collapsed':''}" onclick="toggleCollapse('done')"><span class="arrow">▼</span><span class="section-label">Done</span></button><span class="section-count">${done.length}</span><button class="clear-done-btn" onclick="clearDone()">Clear</button></div><div class="collapsible-body" id="done-body" style="max-height:${doneCollapsed?'0':'2000px'}">${done.map(t=>taskCard(t)).join('')}</div></div>`;
     document.getElementById('mainContent').innerHTML=html;
   }
 
-  // ─── Kanban view ───
   function renderKanban(){
     const allActive=allTasks.filter(t=>t.section==='Active'&&!t.checked);
     const waiting=allTasks.filter(t=>t.section==='Waiting On'&&!t.checked);
     const cf=['office','home','computer','quick','deep'].includes(activeFilter)?activeFilter:null;
-    const ff=t=>{ if(!cf) return true; if(cf==='office') return t.context==='office'; if(cf==='home') return t.context==='home'; if(cf==='computer') return t.context==='computer'; if(cf==='quick') return t.effort==='quick'; if(cf==='deep') return t.effort==='deep'; return true; };
-    const urgent=allActive.filter(t=>t.priority==='urgent').filter(ff);
-    const high=allActive.filter(t=>t.priority==='high').filter(ff);
-    const normal=allActive.filter(t=>t.priority==='normal').filter(ff);
+    const ff=t=>{if(!cf)return true;if(cf==='office')return t.context==='office';if(cf==='home')return t.context==='home';if(cf==='computer')return t.context==='computer';if(cf==='quick')return t.effort==='quick';if(cf==='deep')return t.effort==='deep';return true;};
+    const urgent=allActive.filter(t=>t.priority==='urgent').filter(ff), high=allActive.filter(t=>t.priority==='high').filter(ff), normal=allActive.filter(t=>t.priority==='normal').filter(ff);
     const mkCol=(label,color,bg,priority,tasks)=>{
       const grouped=groupByProject(tasks); let inner='';
-      for(const [proj,pts] of Object.entries(grouped)){
-        if(proj) inner+=`<div class="project-label" style="margin:8px 0 5px">${proj}</div>`;
-        inner+=pts.map(t=>taskCard(t,true)).join('');
-      }
+      for(const [proj,pts] of Object.entries(grouped)){if(proj)inner+=`<div class="project-label" style="margin:8px 0 5px">${proj}</div>`;inner+=pts.map(t=>taskCard(t,true)).join('');}
       return `<div class="kanban-col" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event,'${priority}')"><div class="kanban-col-header" style="color:${color}"><span>${label}</span><span class="section-count" style="background:${bg}">${tasks.length}</span></div><div class="kanban-cards">${inner||'<div class="kanban-empty">No tasks</div>'}</div></div>`;
     };
     let html=`<div class="kanban-board">${mkCol('🔴 Urgent','var(--urgent)','var(--urgent-bg)','urgent',urgent)}${mkCol('🟠 High','var(--high)','var(--high-bg)','high',high)}${mkCol('🟢 Normal','var(--normal)','var(--normal-bg)','normal',normal)}</div>`;
-    if(waiting.length){
-      html+=`<div class="section" style="margin-top:20px"><div class="section-header"><button class="section-collapse ${waitingCollapsed?'collapsed':''}" onclick="toggleCollapse('waiting')"><span class="arrow">▼</span><span class="section-label">Waiting On</span></button><span class="section-count">${waiting.length}</span></div><div class="collapsible-body" id="waiting-body" style="max-height:${waitingCollapsed?'0':'2000px'}">${waiting.map(t=>taskCard(t)).join('')}</div></div>`;
-    }
+    if(waiting.length) html+=`<div class="section" style="margin-top:20px"><div class="section-header"><button class="section-collapse ${waitingCollapsed?'collapsed':''}" onclick="toggleCollapse('waiting')"><span class="arrow">▼</span><span class="section-label">Waiting On</span></button><span class="section-count">${waiting.length}</span></div><div class="collapsible-body" id="waiting-body" style="max-height:${waitingCollapsed?'0':'2000px'}">${waiting.map(t=>taskCard(t)).join('')}</div></div>`;
     document.getElementById('mainContent').innerHTML=html;
   }
 
-  // ─── Calendar view ───
   function renderCalendar(){
     const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
     const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const yr=calendarYear,mo=calendarMonth;
     const tasksByDate={};
-    allTasks.filter(t=>!t.checked&&t.due).forEach(t=>{ const d=parseDue(t.due); if(!d) return; const k=`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; if(!tasksByDate[k]) tasksByDate[k]=[]; tasksByDate[k].push(t); });
-    const firstDay=new Date(yr,mo,1).getDay(), daysInMonth=new Date(yr,mo+1,0).getDate(), prevDays=new Date(yr,mo,0).getDate(), today=new Date();
+    allTasks.filter(t=>!t.checked&&t.due).forEach(t=>{const d=parseDue(t.due);if(!d)return;const k=`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;if(!tasksByDate[k])tasksByDate[k]=[];tasksByDate[k].push(t);});
+    const firstDay=new Date(yr,mo,1).getDay(),daysInMonth=new Date(yr,mo+1,0).getDate(),prevDays=new Date(yr,mo,0).getDate(),today=new Date();
     let grid=DAYS.map(d=>`<div class="cal-day-hdr">${d}</div>`).join('');
     for(let i=0;i<firstDay;i++) grid+=`<div class="cal-day other-month"><div class="cal-day-num">${prevDays-firstDay+i+1}</div></div>`;
     for(let day=1;day<=daysInMonth;day++){
@@ -1135,28 +927,12 @@
       const more=dt.length>3?`<div class="cal-more" onclick="openDayDetail(${yr},${mo},${day})">+${dt.length-3} more</div>`:'';
       grid+=`<div class="cal-day${isTd?' today':''}"><div class="cal-day-num">${day}</div>${chips}${more}</div>`;
     }
-    const trailing=(firstDay+daysInMonth)%7; if(trailing) for(let i=1;i<=7-trailing;i++) grid+=`<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
+    const trailing=(firstDay+daysInMonth)%7; if(trailing)for(let i=1;i<=7-trailing;i++)grid+=`<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
     const noDate=allTasks.filter(t=>!t.checked&&!t.due&&t.section==='Active');
     document.getElementById('mainContent').innerHTML=`<div style="padding-bottom:80px"><div class="cal-nav"><button class="cal-nav-btn" onclick="calNav(-1)">‹ Prev</button><div class="cal-month-label">${MONTHS[mo]} ${yr}</div><button class="cal-nav-btn" onclick="calNav(1)">Next ›</button></div><div class="cal-grid">${grid}</div>${noDate.length?`<div class="section"><div class="section-header"><span class="section-label">No due date</span><span class="section-count">${noDate.length}</span></div>${noDate.map(t=>taskCard(t)).join('')}</div>`:''}</div>`;
   }
-  function calNav(dir){ calendarMonth+=dir; if(calendarMonth>11){calendarMonth=0;calendarYear++;} if(calendarMonth<0){calendarMonth=11;calendarYear--;} renderCalendar(); }
+  function calNav(dir){calendarMonth+=dir;if(calendarMonth>11){calendarMonth=0;calendarYear++;}if(calendarMonth<0){calendarMonth=11;calendarYear--;}renderCalendar();}
 
-  function openDayDetail(yr, mo, day) {
-    const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-    const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const date = new Date(yr, mo, day);
-    const dt = allTasks.filter(t => {
-      if(t.checked) return false;
-      const d = parseDue(t.due); if(!d) return false;
-      return d.getFullYear()===yr && d.getMonth()===mo && d.getDate()===day;
-    });
-    document.getElementById('dayDetailTitle').textContent = `${DAYS[date.getDay()]}, ${MONTHS[mo]} ${day}`;
-    document.getElementById('dayDetailBody').innerHTML = dt.map(t => taskCard(t)).join('') || '<p style="color:var(--text-muted);font-size:13px">No tasks</p>';
-    document.getElementById('dayDetailOverlay').classList.add('open');
-  }
-  function closeDayDetail() { document.getElementById('dayDetailOverlay').classList.remove('open'); }
-
-  // ─── Projects view ───
   function renderProjects(){
     const allActive=allTasks.filter(t=>t.section==='Active'&&!t.checked);
     const q=searchQuery.toLowerCase();
@@ -1165,23 +941,19 @@
     const PO={urgent:0,high:1,normal:2};
     for(const [proj,tasks] of Object.entries(grouped)){
       if(!proj) continue;
-      const ft=tasks.filter(matches);
-      if(!ft.length) continue;
+      const ft=tasks.filter(matches); if(!ft.length) continue;
       ft.sort((a,b)=>PO[a.priority]-PO[b.priority]);
       html+=`<div class="section"><div class="section-header"><span class="section-label">📁 ${proj}</span><span class="section-count">${ft.length}</span></div>${ft.map(t=>taskCard(t)).join('')}</div>`;
     }
     const ungrouped=(grouped['']||[]).filter(matches);
-    if(ungrouped.length){
-      ungrouped.sort((a,b)=>PO[a.priority]-PO[b.priority]);
-      html+=`<div class="section"><div class="section-header"><span class="section-label">Ungrouped</span><span class="section-count">${ungrouped.length}</span></div>${ungrouped.map(t=>taskCard(t)).join('')}</div>`;
-    }
+    if(ungrouped.length){ungrouped.sort((a,b)=>PO[a.priority]-PO[b.priority]);html+=`<div class="section"><div class="section-header"><span class="section-label">Ungrouped</span><span class="section-count">${ungrouped.length}</span></div>${ungrouped.map(t=>taskCard(t)).join('')}</div>`;}
     if(!html) html='<div class="empty-state"><h2>No projects</h2><p>Add tasks under <code>### Project Name</code> headings in TASKS.md.</p></div>';
     const searchHtml=`<div style="margin-bottom:16px"><div class="search-wrap"><span class="search-icon-inner">🔍</span><input class="search-input" placeholder="Filter projects…" oninput="searchQuery=this.value;renderProjects()" value="${searchQuery}" /></div></div>`;
     document.getElementById('mainContent').innerHTML=searchHtml+html;
   }
 
-  // ─── Shared helpers ───
-  function groupByProject(tasks){ const out={}; tasks.forEach(t=>{ const k=t.project||''; if(!out[k]) out[k]=[]; out[k].push(t); }); return out; }
+  // ─── Helpers ───
+  function groupByProject(tasks){const out={};tasks.forEach(t=>{const k=t.project||'';if(!out[k])out[k]=[];out[k].push(t);});return out;}
   function renderSection(type,label,tasks){
     const grouped=groupByProject(tasks); let inner='';
     for(const [proj,pts] of Object.entries(grouped)){
@@ -1190,15 +962,14 @@
     }
     return `<div class="section ${type}-section"><div class="section-header"><span class="section-label">${label}</span><span class="section-count">${tasks.length}</span></div>${inner}</div>`;
   }
-
   function taskCard(t,draggable=false){
     const ck=t.checked; let tags='';
     if(!ck){
-      if(t.effort==='quick')       tags+=`<span class="tag tag-quick">⚡ Quick</span>`;
-      else if(t.effort==='deep')   tags+=`<span class="tag tag-deep">🎯 Deep focus</span>`;
-      else if(t.effort==='30min')  tags+=`<span class="tag tag-30min">⏱ 30 min</span>`;
-      if(t.context==='office')     tags+=`<span class="tag tag-office">🏥 Office</span>`;
-      else if(t.context==='home')  tags+=`<span class="tag tag-home">🏠 Home</span>`;
+      if(t.effort==='quick')      tags+=`<span class="tag tag-quick">⚡ Quick</span>`;
+      else if(t.effort==='deep')  tags+=`<span class="tag tag-deep">🎯 Deep focus</span>`;
+      else if(t.effort==='30min') tags+=`<span class="tag tag-30min">⏱ 30 min</span>`;
+      if(t.context==='office')    tags+=`<span class="tag tag-office">🏥 Office</span>`;
+      else if(t.context==='home') tags+=`<span class="tag tag-home">🏠 Home</span>`;
       else if(t.context==='computer') tags+=`<span class="tag tag-computer">💻 Computer</span>`;
       else if(t.context==='anywhere') tags+=`<span class="tag tag-anywhere">📍 Anywhere</span>`;
       if(t.due) tags+=dueBadge(t.due);
@@ -1214,13 +985,12 @@
       <button class="delete-btn" onclick="deleteTask(${t.lineIndex})" title="Delete">✕</button>
     </div>`;
   }
-
   function toggleCollapse(id){
     const body=document.getElementById(id+'-body'); if(!body) return;
     const btn=body.previousElementSibling.querySelector('.section-collapse');
-    if(id==='done') doneCollapsed=!doneCollapsed; if(id==='waiting') waitingCollapsed=!waitingCollapsed;
+    if(id==='done')doneCollapsed=!doneCollapsed; if(id==='waiting')waitingCollapsed=!waitingCollapsed;
     body.style.maxHeight=(id==='done'?doneCollapsed:waitingCollapsed)?'0':'2000px';
-    if(btn) btn.classList.toggle('collapsed');
+    if(btn)btn.classList.toggle('collapsed');
   }
 
   window.addEventListener('DOMContentLoaded', init);
