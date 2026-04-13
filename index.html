@@ -170,6 +170,10 @@
     .section-collapse.collapsed .arrow { transform: rotate(-90deg); }
     .collapsible-body { overflow: hidden; transition: max-height 0.3s ease; }
 
+    /* ─── Recur tag ─── */
+    .tag-recur { background: #e0e7ff; color: #3730a3; }
+    html.dark .tag-recur { background: #1e1b4b; color: #a5b4fc; }
+
     /* ─── Clear done button ─── */
     .clear-done-btn { margin-left: auto; background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 10px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
     .clear-done-btn:hover { background: var(--urgent-bg); color: var(--urgent); border-color: var(--urgent-border); }
@@ -377,6 +381,7 @@
       <div class="form-row"><label class="form-label">Context</label><select class="form-select" id="newContext"><option value="">—</option><option value="office">Office</option><option value="home">Home</option><option value="computer">Computer</option><option value="anywhere">Anywhere</option></select></div>
     </div>
     <div class="form-row"><label class="form-label">Due date</label><input class="form-input" id="newDue" type="date" /></div>
+    <div class="form-row"><label class="form-label">Repeats</label><select class="form-select" id="newRecur"><option value="">— Never —</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Monthly</option><option value="yearly">Yearly</option></select></div>
     <div class="form-row"><label class="form-label">Notes</label><input class="form-input" id="newNotes" placeholder="Any notes or details" /></div>
     <div class="form-actions"><button class="btn-cancel" onclick="closeAddForm()">Cancel</button><button class="btn-save" onclick="addTask()">Add Task</button></div>
   </div>
@@ -393,6 +398,7 @@
       <div class="form-row"><label class="form-label">Context</label><select class="form-select" id="editContext"><option value="">—</option><option value="office">Office</option><option value="home">Home</option><option value="computer">Computer</option><option value="anywhere">Anywhere</option></select></div>
     </div>
     <div class="form-row"><label class="form-label">Due date</label><input class="form-input" id="editDue" type="date" /></div>
+    <div class="form-row"><label class="form-label">Repeats</label><select class="form-select" id="editRecur"><option value="">— Never —</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Monthly</option><option value="yearly">Yearly</option></select></div>
     <div class="form-row"><label class="form-label">Notes</label><input class="form-input" id="editNotes" placeholder="Any notes or details" /></div>
     <div class="form-row"><label class="form-label">Quick defer</label>
       <div class="snooze-btns">
@@ -576,9 +582,30 @@
 
   // ─── Task mutations ───
   async function toggleTask(lineIndex) {
-    const lines = rawContent.split('\n'), line = lines[lineIndex];
-    if (line.includes('- [ ]'))      lines[lineIndex] = line.replace('- [ ]','- [x]');
-    else if (line.includes('- [x]')) lines[lineIndex] = line.replace('- [x]','- [ ]');
+    const lines = rawContent.split('\n');
+    const line = lines[lineIndex];
+    const task = allTasks.find(t => t.lineIndex === lineIndex);
+    if (line.includes('- [ ]')) {
+      lines[lineIndex] = line.replace('- [ ]', '- [x]');
+      if (task && task.recur) {
+        const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const base = (task.due ? parseDue(task.due) : null) || new Date();
+        const next = new Date(base);
+        if (task.recur === 'daily')     next.setDate(next.getDate() + 1);
+        else if (task.recur === 'weekly')    next.setDate(next.getDate() + 7);
+        else if (task.recur === 'biweekly')  next.setDate(next.getDate() + 14);
+        else if (task.recur === 'monthly')   next.setMonth(next.getMonth() + 1);
+        else if (task.recur === 'yearly')    next.setFullYear(next.getFullYear() + 1);
+        const nd = `${MONTHS[next.getMonth()]} ${next.getDate()}`;
+        let newLine = line; // copy original (unchecked)
+        if (/due\s+[A-Za-z]+\s+\d+/i.test(newLine)) newLine = newLine.replace(/due\s+[A-Za-z]+\s+\d+/i, 'due ' + nd);
+        else if (newLine.includes(' — ')) newLine += `; due ${nd}`;
+        else newLine += ` — due ${nd}`;
+        lines.splice(lineIndex, 0, newLine); // insert new copy before the done one
+      }
+    } else if (line.includes('- [x]')) {
+      lines[lineIndex] = line.replace('- [x]', '- [ ]');
+    }
     rawContent = lines.join('\n'); allTasks = parseTasks(rawContent); render(); await writeBack();
   }
 
@@ -666,7 +693,7 @@
     document.getElementById('addModal').classList.remove('open');
     ['newTitle','newNotes','newProjectName'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     document.getElementById('newPriority').value='normal'; document.getElementById('newEffort').value=''; document.getElementById('newContext').value='';
-    document.getElementById('newDue').value=''; document.getElementById('newProjectRow').style.display='none';
+    document.getElementById('newDue').value=''; document.getElementById('newRecur').value=''; document.getElementById('newProjectRow').style.display='none';
   }
   async function addTask() {
     const title=document.getElementById('newTitle').value.trim(); if(!title){document.getElementById('newTitle').focus();return;}
@@ -675,9 +702,10 @@
     const notes=document.getElementById('newNotes').value.trim();
     let project=document.getElementById('newProject').value;
     if(project==='__new__') project=(document.getElementById('newProjectName').value||'').trim();
+    const recur=document.getElementById('newRecur').value;
     const tags=['#'+priority]; if(effort)tags.push('#'+effort); if(context)tags.push('#'+context);
     let line=`- [ ] **${title}** ${tags.join(' ')}`;
-    const extras=[]; if(notes)extras.push(notes); if(due)extras.push('due '+due);
+    const extras=[]; if(notes)extras.push(notes); if(due)extras.push('due '+due); if(recur)extras.push('recur:'+recur);
     if(extras.length) line+=' — '+extras.join('; ');
     const lines=rawContent.split('\n');
     if(project){
@@ -707,6 +735,7 @@
     document.getElementById('editEffort').value   = t.effort==='deep'?'deep_focus':(t.effort||'');
     document.getElementById('editContext').value  = t.context||'';
     document.getElementById('editDue').value      = t.due?dateToInputVal(t.due):'';
+    document.getElementById('editRecur').value    = t.recur||'';
     document.getElementById('editNotes').value    = t.notes||'';
     document.getElementById('editModal').classList.add('open');
     setTimeout(()=>document.getElementById('editTitle').focus(),50);
@@ -717,11 +746,12 @@
     const priority=document.getElementById('editPriority').value, effort=document.getElementById('editEffort').value;
     const context=document.getElementById('editContext').value, due=inputValToDate(document.getElementById('editDue').value);
     const notes=document.getElementById('editNotes').value.trim();
+    const recur=document.getElementById('editRecur').value;
     const tags=['#'+priority]; if(effort)tags.push('#'+effort); if(context)tags.push('#'+context);
     const origLine=rawContent.split('\n')[editingIndex]||'';
     const isDone=origLine.includes('- [x]');
     let line=`${isDone?'- [x]':'- [ ]'} **${title}** ${tags.join(' ')}`;
-    const extras=[]; if(notes)extras.push(notes); if(due)extras.push('due '+due);
+    const extras=[]; if(notes)extras.push(notes); if(due)extras.push('due '+due); if(recur)extras.push('recur:'+recur);
     if(extras.length) line+=' — '+extras.join('; ');
     const lines=rawContent.split('\n'); lines[editingIndex]=line;
     rawContent=lines.join('\n'); allTasks=parseTasks(rawContent); closeEditForm(); render(); await writeBack();
@@ -756,12 +786,13 @@
       const title=titleM?titleM[1]:text.replace(/#\w+/g,'').replace(/—.*/,'').trim();
       const tags=(text.match(/#(\w+)/g)||[]).map(t=>t.slice(1));
       const dueM=text.match(/due\s+([A-Za-z]+\s+\d+)/i); const due=dueM?dueM[1]:null;
-      let notes=text.replace(/\*\*[^*]+\*\*/,'').replace(/#\w+/g,'').replace(/due\s+[A-Za-z]+\s+\d+/i,'').replace(/^\s*—\s*/,'').trim();
-      if(notes==='—') notes='';
+      const recurM=text.match(/recur:(\w+)/i); const recur=recurM?recurM[1].toLowerCase():null;
+      let notes=text.replace(/\*\*[^*]+\*\*/,'').replace(/#\w+/g,'').replace(/due\s+[A-Za-z]+\s+\d+/i,'').replace(/recur:\w+/i,'').replace(/^\s*[—\s]+/,'').replace(/;\s*;/g,';').replace(/;\s*$/,'').trim();
+      if(notes==='—'||notes===';') notes='';
       const priority=tags.includes('urgent')?'urgent':tags.includes('high')?'high':'normal';
       const effort=tags.includes('quick')?'quick':tags.includes('deep_focus')?'deep':tags.includes('30min')?'30min':null;
       const context=tags.includes('office')?'office':tags.includes('home')?'home':tags.includes('computer')?'computer':tags.includes('anywhere')?'anywhere':null;
-      tasks.push({lineIndex:i,checked,title,tags,priority,effort,context,due,notes,section,project});
+      tasks.push({lineIndex:i,checked,title,tags,priority,effort,context,due,recur,notes,section,project});
     }
     return tasks;
   }
@@ -973,6 +1004,7 @@
       else if(t.context==='computer') tags+=`<span class="tag tag-computer">💻 Computer</span>`;
       else if(t.context==='anywhere') tags+=`<span class="tag tag-anywhere">📍 Anywhere</span>`;
       if(t.due) tags+=dueBadge(t.due);
+      if(t.recur) { const rl={daily:'Daily',weekly:'Weekly',biweekly:'2 weeks',monthly:'Monthly',yearly:'Yearly'}; tags+=`<span class="tag tag-recur">↻ ${rl[t.recur]||t.recur}</span>`; }
     }
     const dragAttrs=draggable?`draggable="true" ondragstart="onDragStart(event,${t.lineIndex})" ondragend="onDragEnd(event)"`:'';
     return `<div class="task-card ${ck?'done':t.priority}" data-line="${t.lineIndex}" ${dragAttrs}>
