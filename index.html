@@ -13,6 +13,7 @@
   <script>if(localStorage.getItem('argos-dark')==='1')document.documentElement.classList.add('dark');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -226,6 +227,17 @@
     .cal-chip.urgent { background: var(--urgent-bg); color: var(--urgent); }
     .cal-chip.high   { background: var(--high-bg);   color: var(--high); }
     .cal-chip.normal { background: var(--normal-bg); color: var(--normal); }
+    .cal-chip.gcal-ev { background: #dbeafe; color: #1d4ed8; }
+    html.dark .cal-chip.gcal-ev { background: #1e3a5f; color: #93c5fd; }
+    .gcal-connected { color: #3b82f6 !important; border-color: #93c5fd !important; }
+
+    /* ─── Today's schedule ─── */
+    .schedule-section { margin-bottom: 16px; }
+    .gcal-row { display: flex; align-items: baseline; gap: 10px; padding: 7px 4px; border-bottom: 1px solid var(--border); }
+    .gcal-row:last-child { border-bottom: none; }
+    .gcal-row-time { font-size: 12px; color: var(--text-muted); min-width: 110px; flex-shrink: 0; }
+    .gcal-row-title { font-size: 13px; font-weight: 500; flex: 1; color: var(--text); }
+    .gcal-row-loc { font-size: 11px; color: var(--text-muted); }
     .cal-more { font-size: 10px; color: var(--text-muted); cursor: pointer; text-decoration: underline; text-decoration-color: var(--border); }
     .cal-more:hover { color: var(--text-secondary); }
 
@@ -323,6 +335,7 @@
         <button class="view-btn"        onclick="setView('projects',this)" title="Projects (4)">▤</button>
       </div>
       <button class="icon-btn" id="searchToggleBtn" onclick="toggleSearch()" title="Search (/)">🔍</button>
+      <button class="icon-btn" id="gcalBtn"         onclick="connectGcal()" title="Connect Google Calendar">📅</button>
       <button class="icon-btn" id="darkBtn"         onclick="toggleDark()"   title="Dark mode (D)">🌙</button>
       <button class="icon-btn"                       onclick="fetchFromGitHub()" title="Sync now (R)">↻</button>
       <button class="icon-btn"                       onclick="openSetup()"   title="Settings">⚙️</button>
@@ -482,6 +495,9 @@
   let calendarYear = new Date().getFullYear(), calendarMonth = new Date().getMonth();
   let doneCollapsed = true, waitingCollapsed = false;
   let editingIndex = null, dragSrcIndex = null, autoReloadTimer = null;
+  let gcalEvents = [], gcalToken = null, gcalTokenExpiry = 0, gcalClient = null;
+  const GCAL_CLIENT_ID = '531356096260-q8asc76dbfr7t4s6d886kck0jk4klije.apps.googleusercontent.com';
+  const GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 
   // ─── Config ───
   function getConfig() { try { return JSON.parse(localStorage.getItem('argos-config')) || {}; } catch(e) { return {}; } }
@@ -581,12 +597,76 @@
     if (autoReloadTimer) { clearInterval(autoReloadTimer); autoReloadTimer = null; }
   }
 
+  // ─── Google Calendar ───
+  function initGcal() {
+    gcalToken = localStorage.getItem('gcal-token');
+    gcalTokenExpiry = parseInt(localStorage.getItem('gcal-token-expiry') || '0');
+    if (gcalToken && Date.now() < gcalTokenExpiry) {
+      document.getElementById('gcalBtn').classList.add('gcal-connected');
+      fetchGcalEvents();
+    }
+  }
+
+  function connectGcal() {
+    if (!window.google) { alert('Google API not loaded yet — try again in a moment.'); return; }
+    if (!gcalClient) {
+      gcalClient = google.accounts.oauth2.initTokenClient({
+        client_id: GCAL_CLIENT_ID, scope: GCAL_SCOPE,
+        callback: (resp) => {
+          if (resp.error) { console.error(resp); return; }
+          gcalToken = resp.access_token;
+          gcalTokenExpiry = Date.now() + (resp.expires_in - 60) * 1000;
+          localStorage.setItem('gcal-token', gcalToken);
+          localStorage.setItem('gcal-token-expiry', String(gcalTokenExpiry));
+          document.getElementById('gcalBtn').classList.add('gcal-connected');
+          fetchGcalEvents();
+        }
+      });
+    }
+    gcalClient.requestAccessToken();
+  }
+
+  async function fetchGcalEvents() {
+    if (!gcalToken) return;
+    const start = new Date(calendarYear, calendarMonth - 1, 1);
+    const end   = new Date(calendarYear, calendarMonth + 2, 0);
+    try {
+      const res = await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${start.toISOString()}&timeMax=${end.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=500`,
+        { headers: { 'Authorization': `Bearer ${gcalToken}` } }
+      );
+      if (res.status === 401) {
+        gcalToken = null; localStorage.removeItem('gcal-token');
+        document.getElementById('gcalBtn').classList.remove('gcal-connected');
+        if (gcalClient) gcalClient.requestAccessToken(); return;
+      }
+      const data = await res.json();
+      gcalEvents = data.items || [];
+      render();
+    } catch(e) { console.error('GCal error:', e); }
+  }
+
+  function gcalEventsForDay(yr, mo, day) {
+    return gcalEvents.filter(ev => {
+      const d = new Date(ev.start.dateTime || ev.start.date);
+      return d.getFullYear()===yr && d.getMonth()===mo && d.getDate()===day;
+    }).sort((a,b) => new Date(a.start.dateTime||a.start.date) - new Date(b.start.dateTime||b.start.date));
+  }
+
+  function fmtEvTime(ev) {
+    if (!ev.start.dateTime) return 'All day';
+    const s = new Date(ev.start.dateTime), e = new Date(ev.end.dateTime);
+    const fmt = d => d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    return `${fmt(s)} – ${fmt(e)}`;
+  }
+
   // ─── Init ───
   async function init() {
     if (localStorage.getItem('argos-dark') === '1') { isDarkMode = true; document.getElementById('darkBtn').textContent = '☀️'; }
     const cfg = getConfig();
     if (!cfg.token || !cfg.dataRepo) { setStatus('idle', 'Not connected'); openSetup(); }
     else { await fetchFromGitHub(); startAutoReload(); }
+    initGcal();
   }
 
   // ─── Task mutations ───
@@ -952,6 +1032,14 @@
     const waiting=allTasks.filter(t=>t.section==='Waiting On'&&!t.checked);
     const done=allTasks.filter(t=>t.checked);
     let html='';
+    if((activeFilter==='all'||activeFilter==='today')&&gcalToken){
+      const now=new Date();
+      const todayEvs=gcalEventsForDay(now.getFullYear(),now.getMonth(),now.getDate());
+      if(todayEvs.length){
+        const rows=todayEvs.map(ev=>`<div class="gcal-row"><div class="gcal-row-time">${fmtEvTime(ev)}</div><div class="gcal-row-title">${ev.summary||'(No title)'}</div>${ev.location?`<div class="gcal-row-loc">📍 ${ev.location}</div>`:''}</div>`).join('');
+        html+=`<div class="schedule-section"><div class="section-header"><span class="section-label">📅 Today's Schedule</span></div>${rows}</div>`;
+      }
+    }
     if(activeFilter==='waiting'){
       html=waiting.length?`<div class="section"><div class="section-header"><span class="section-label">⏳ Waiting On</span><span class="section-count">${waiting.length}</span></div>${waiting.map(t=>taskCard(t)).join('')}</div>`:'<div class="empty-state"><h2>Nothing waiting</h2><p>No tasks in Waiting On.</p></div>';
       document.getElementById('mainContent').innerHTML=html; return;
@@ -996,15 +1084,21 @@
     for(let day=1;day<=daysInMonth;day++){
       const isTd=today.getFullYear()===yr&&today.getMonth()===mo&&today.getDate()===day;
       const dt=tasksByDate[`${yr}-${mo}-${day}`]||[];
-      const chips=dt.slice(0,3).map(t=>`<div class="cal-chip ${t.priority}" title="${t.title}" onclick="openEditForm(${t.lineIndex})">${t.title}</div>`).join('');
-      const more=dt.length>3?`<div class="cal-more" onclick="openDayDetail(${yr},${mo},${day})">+${dt.length-3} more</div>`:'';
-      grid+=`<div class="cal-day${isTd?' today':''}"><div class="cal-day-num">${day}</div>${chips}${more}</div>`;
+      const evs=gcalEventsForDay(yr,mo,day);
+      const evChips=evs.slice(0,2).map(ev=>{
+        const t=ev.start.dateTime?new Date(ev.start.dateTime).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' ':'';
+        return `<div class="cal-chip gcal-ev" title="${ev.summary||''}">${t}${ev.summary||''}</div>`;
+      }).join('');
+      const taskChips=dt.slice(0,2).map(t=>`<div class="cal-chip ${t.priority}" title="${t.title}" onclick="openEditForm(${t.lineIndex})">${t.title}</div>`).join('');
+      const total=evs.length+dt.length, shown=Math.min(evs.length,2)+Math.min(dt.length,2);
+      const more=total>shown?`<div class="cal-more" onclick="openDayDetail(${yr},${mo},${day})">+${total-shown} more</div>`:'';
+      grid+=`<div class="cal-day${isTd?' today':''}"><div class="cal-day-num">${day}</div>${evChips}${taskChips}${more}</div>`;
     }
     const trailing=(firstDay+daysInMonth)%7; if(trailing)for(let i=1;i<=7-trailing;i++)grid+=`<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
     const noDate=allTasks.filter(t=>!t.checked&&!t.due&&t.section==='Active');
     document.getElementById('mainContent').innerHTML=`<div style="padding-bottom:80px"><div class="cal-nav"><button class="cal-nav-btn" onclick="calNav(-1)">‹ Prev</button><div class="cal-month-label">${MONTHS[mo]} ${yr}</div><button class="cal-nav-btn" onclick="calNav(1)">Next ›</button></div><div class="cal-grid">${grid}</div>${noDate.length?`<div class="section"><div class="section-header"><span class="section-label">No due date</span><span class="section-count">${noDate.length}</span></div>${noDate.map(t=>taskCard(t)).join('')}</div>`:''}</div>`;
   }
-  function calNav(dir){calendarMonth+=dir;if(calendarMonth>11){calendarMonth=0;calendarYear++;}if(calendarMonth<0){calendarMonth=11;calendarYear--;}renderCalendar();}
+  function calNav(dir){calendarMonth+=dir;if(calendarMonth>11){calendarMonth=0;calendarYear++;}if(calendarMonth<0){calendarMonth=11;calendarYear--;}if(gcalToken)fetchGcalEvents();else renderCalendar();}
 
   function renderProjects(){
     const allActive=allTasks.filter(t=>t.section==='Active'&&!t.checked);
