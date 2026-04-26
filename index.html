@@ -630,18 +630,32 @@
     if (!gcalToken) return;
     const start = new Date(calendarYear, calendarMonth - 1, 1);
     const end   = new Date(calendarYear, calendarMonth + 2, 0);
+    const hdrs  = { 'Authorization': `Bearer ${gcalToken}` };
     try {
-      const res = await fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${start.toISOString()}&timeMax=${end.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=500`,
-        { headers: { 'Authorization': `Bearer ${gcalToken}` } }
+      // Get all calendars first
+      const calListRes = await fetch(
+        'https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader',
+        { headers: hdrs }
       );
-      if (res.status === 401) {
+      if (calListRes.status === 401) {
         gcalToken = null; localStorage.removeItem('gcal-token');
         document.getElementById('gcalBtn').classList.remove('gcal-connected');
         if (gcalClient) gcalClient.requestAccessToken(); return;
       }
-      const data = await res.json();
-      gcalEvents = data.items || [];
+      const calList = await calListRes.json();
+      const calIds  = (calList.items || []).map(c => c.id);
+      if (!calIds.length) calIds.push('primary');
+      // Fetch events from all calendars in parallel
+      const params = `timeMin=${start.toISOString()}&timeMax=${end.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=500`;
+      const results = await Promise.all(
+        calIds.map(id =>
+          fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events?${params}`, { headers: hdrs })
+            .then(r => r.ok ? r.json() : { items: [] })
+            .then(d => d.items || [])
+            .catch(() => [])
+        )
+      );
+      gcalEvents = results.flat();
       render();
     } catch(e) { console.error('GCal error:', e); }
   }
